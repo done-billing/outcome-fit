@@ -15,36 +15,31 @@ description: Use when a user wants to model what they would earn from outcome-ba
 
 ## Step 1: Connect to data
 
-Ask the user to share event data for 1-2 customers they consider successful. Advise them to use data from roughly a month ago rather than the most recent activity. Recent outcomes may still be in progress and will appear as missed even if they succeed later. A month-old window gives a complete picture of the full outcome lifecycle.
+Say only: "Share a sample of your event data — file, paste, or I can query your database if one is connected."
 
-Two options:
+**If the user shares a file or paste (CSV, JSON, or any tabular format):**
+Auto-detect which columns map to the four required fields using names and content:
+- `customer_id` — any column that looks like a customer or account identifier
+- `event_type` — any column containing event or action names
+- `event_value` — any column with a numeric score or value (optional)
+- `created_at` — any column containing timestamps
 
-**Option A: File upload**
-Ask them to export and share a sample of their event log (CSV or JSON, even 20-50 rows is enough). Before reading the file, strip all columns except: `customer_id`, `event_type`, `event_value`, and `created_at`. Discard any column that could identify a person: name, email, phone, company name, address, or any free-text field.
+Silently remap to those four names. Discard all other columns — especially anything that looks like a name, email, phone, company name, or free-text. Do not tell the user what you mapped or ask them to confirm.
 
-Tell the user: "Before I read your file, I'm stripping all columns except customer_id, event_type, event_value, and created_at. Names, emails, and any other identifying fields are discarded and never leave your machine."
-
-**Option B: MCP connection**
-If they have an analytics warehouse connected (BigQuery, Snowflake, Redshift, Postgres), tell the user: "I'll only query the four safe columns: customer_id, event_type, event_value, and created_at. No names, emails, or identifying fields will be fetched." Then select only the four safe columns:
+**If a database MCP is connected (BigQuery, Snowflake, Redshift, Postgres):**
+Discover the events table automatically. Then query it silently:
 ```sql
 SELECT customer_id, event_type, event_value, created_at
 FROM events
-WHERE customer_id IN ('<customer_1>', '<customer_2>')
-  AND created_at >= NOW() - INTERVAL '2 months'
+WHERE created_at >= NOW() - INTERVAL '2 months'
   AND created_at < NOW() - INTERVAL '2 weeks'
 ORDER BY created_at ASC
 LIMIT 200
 ```
+Adapt column and table names to match what you find in the schema. Never select `*`.
 
-Never select `*`. Never fetch names, emails, or any field beyond the four above.
-
-Once data is available, scan it and identify:
-- The distinct event types that appear
-- The sequence of events for each customer
-- Which event appears to mark the start of an outcome (e.g. `contract_created`, `case_opened`)
-- Which event(s) appear to mark success (e.g. `document_signed`, `payment_received`)
-
-Internally note the distinct event type names you found. Do NOT show them to the user. Do NOT produce tables, metrics, counts, averages, or comparisons about customers. Do NOT present candidate events as options or multiple-choice menus. Discard all row-level data (timestamps, values, customer IDs) from memory before moving to Step 2. You only need the event type names going forward.
+**Once data is loaded:**
+Internally note the distinct event type names. Do NOT show them to the user. Do NOT produce tables, metrics, or comparisons. Do NOT present candidate events as options. Discard all row-level data before moving to Step 2 — you only need the event type names going forward.
 
 ## Step 2: Map the condition
 
