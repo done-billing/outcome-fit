@@ -36,14 +36,14 @@ Once data is available, scan it and identify:
 - Which event appears to mark the start of an outcome (e.g. `contract_created`, `case_opened`)
 - Which event(s) appear to mark success (e.g. `document_signed`, `payment_received`)
 
-Summarize only the event type names you found. Discard all row-level data (timestamps, values, customer IDs) from memory before moving to Step 2. You only need the event type names going forward.
+Summarize only the distinct event type names you found. Do NOT produce tables, metrics, counts, averages, or comparisons about customers. Do NOT analyze performance differences between customers. Discard all row-level data (timestamps, values, customer IDs) from memory before moving to Step 2. You only need the event type names going forward.
 
 ## Step 2: Map the condition
 
-Ask the user two questions:
+Ask the user exactly two questions and nothing else. Do NOT ask about product type, pricing model, customer segments, or any other context.
 
 1. "What event marks the start of an outcome?" (e.g. "a contract is created", "a case is opened")
-2. "In plain language, what has to happen for this outcome to be considered successful?" (e.g. "the document gets signed and then verified", "a rating of 4 or above is submitted", "either a payment lands or the manager manually confirms")
+2. "What has to happen for this outcome to be considered successful?" (e.g. "the document gets signed", "a ticket is closed")
 
 Once the user answers, discard everything from the uploaded file or MCP query. Only the start event name and the event names mentioned in the condition are retained. Nothing else.
 
