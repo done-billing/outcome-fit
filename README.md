@@ -51,6 +51,33 @@ The skill runs a guided conversation in Claude Code:
 
 ---
 
+## What your data needs to look like
+
+The skill needs an event log where individual actions are grouped into sessions or units of work. Three things must be present:
+
+1. **A start event** that opens an outcome window (e.g. a ticket being created)
+2. **A grouping key** that links all events in one session (e.g. a ticket or chat ID)
+3. **A success signal** that the skill can evaluate against a condition (e.g. a CSAT score, a status change, a closing event)
+
+Here is a real example from a customer support product:
+
+```
+customer_id,    chat_id,   event_type,        event_value, created_at
+aperture,       449c...,   ticket_opened,                  2026-03-01T10:01
+aperture,       449c...,   response_sent,                  2026-03-01T10:05
+aperture,       449c...,   user_closed_chat,               2026-03-01T10:14
+aperture,       449c...,   csat,              5,           2026-03-01T10:22
+```
+
+In this case:
+- `ticket_opened` is the **start event** that begins the outcome window
+- `chat_id` is the **grouping key** that ties all events to the same conversation
+- `csat >= 4` is the **success condition** the skill evaluates to decide whether the outcome was achieved
+
+The skill auto-detects your columns and asks you to map them. You do not need to pre-process anything.
+
+---
+
 ## Installation
 
 In Claude Code, run:
