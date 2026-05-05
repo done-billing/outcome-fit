@@ -29,6 +29,6 @@ Run `/pricing-fit` in Claude Code to start the guided setup, or install this pac
 ## Installation
 
 ```bash
-/plugin marketplace add <your-github-username>/pricing-fit
-/plugin install pricing-fit@<your-github-username>-pricing-fit
+/plugin marketplace add done-dot/pricing-fit
+/plugin install pricing-fit@done-dot-pricing-fit
 ```
