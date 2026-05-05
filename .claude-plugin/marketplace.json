@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "pricing-fit",
+  "name": "outcome-fit",
   "owner": {
     "name": "George Kats",
     "url": "https://github.com/done-billing"

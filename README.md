@@ -57,7 +57,7 @@ In Claude Code, run:
 
 ```
 /plugin marketplace add done-billing/outcome-fit
-/plugin install outcome-fit@pricing-fit
+/plugin install outcome-fit@outcome-fit
 /reload-plugins
 ```
 
